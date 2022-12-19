@@ -1449,10 +1449,16 @@ namespace DarknetLocator
             if(lstRect.SelectedIndex > -1)
             {                
                 string elements = lstRect.Items[lstRect.SelectedIndex].ToString();
-                elements = cb_classes.SelectedIndex.ToString() + elements.Substring(1);
-                lstRect.Items[lstRect.SelectedIndex] = elements;
+                int spaceIdx = elements.IndexOf(" ");
 
-                CompleteEdit();
+                string currentClass = elements.Substring(0, spaceIdx);
+                string newClass = cb_classes.SelectedIndex.ToString();
+                if(currentClass != newClass)
+                {
+                    elements = newClass + elements.Substring(spaceIdx);
+                    lstRect.Items[lstRect.SelectedIndex] = elements;
+                    CompleteEdit();
+                }
             }            
         }
 
