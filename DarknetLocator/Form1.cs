@@ -562,10 +562,6 @@ namespace DarknetLocator
             this.Text += " (Debug)";
 #endif
 
-            TGMTtracking.GetInstance().Init("http://viscomsolution.com/tracking/tracking_DarknetLocator.php");
-            TGMTtracking.GetInstance().SendUsage();
-
-            LoadClasses();
 
             checkTextFileToolStripMenuItem.Visible = false;
             RectangleToolStripMenuItem.Visible = false;
@@ -1652,6 +1648,7 @@ namespace DarknetLocator
 
             if(!found)
             {
+                m_lastSearchIndex = 0;
                 MessageBox.Show("Not found");
             }
         }
