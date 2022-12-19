@@ -78,7 +78,6 @@
     <Compile Include="TGMTimage.cs" />
     <Compile Include="TGMTonline.cs" />
     <Compile Include="TGMTregistry.cs" />
-    <Compile Include="TGMTtracking.cs" />
     <Compile Include="TGMTutil.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>

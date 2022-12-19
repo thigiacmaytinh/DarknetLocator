@@ -1102,7 +1102,9 @@ namespace DarknetLocator
             int offset = ANCHOR_WIDTH / 2;
             for (int i = 0; i < lstRect.Items.Count; i++)
             {
-                int classID = Convert.ToInt32(lstRect.Items[i].ToString().Substring(0,1));                
+                string elements = lstRect.Items[i].ToString();
+                int spaceIdx = elements.IndexOf(" ");
+                int classID = Convert.ToInt32(elements.Substring(0, spaceIdx));                
                 string className = cb_classes.Items[classID].ToString();
                 Rectangle r = GetRect(i);
                 if (i == lstRect.SelectedIndex)
