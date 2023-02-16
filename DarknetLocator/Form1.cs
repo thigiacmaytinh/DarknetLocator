@@ -795,9 +795,10 @@ namespace DarknetLocator
             timerLoading.Start();
             lblMessage.Text = "Loading file...";
             TGMTregistry.GetInstance().SaveValue("folderPath", path);
-            bgLoadFile.RunWorkerAsync();
 
             LoadClasses();
+
+            bgLoadFile.RunWorkerAsync();            
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////
