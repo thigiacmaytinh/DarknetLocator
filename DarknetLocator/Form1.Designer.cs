@@ -54,6 +54,7 @@
             this.CropImageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.checkTextFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.moveFileNotAnnotatedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuStrip1 = new System.Windows.Forms.MenuStrip();
             this.RectangleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.GroupBox1 = new System.Windows.Forms.GroupBox();
@@ -77,7 +78,6 @@
             this.timerClear = new System.Windows.Forms.Timer(this.components);
             this.timerAutoSave = new System.Windows.Forms.Timer(this.components);
             this.bgCrop = new System.ComponentModel.BackgroundWorker();
-            this.moveFileNotAnnotatedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.PictureBox1)).BeginInit();
             this.ctx_images.SuspendLayout();
             this.MenuStrip1.SuspendLayout();
@@ -314,7 +314,7 @@
             // CropImageToolStripMenuItem
             // 
             this.CropImageToolStripMenuItem.Name = "CropImageToolStripMenuItem";
-            this.CropImageToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
+            this.CropImageToolStripMenuItem.Size = new System.Drawing.Size(218, 22);
             this.CropImageToolStripMenuItem.Text = "Crop and save all images";
             this.CropImageToolStripMenuItem.Click += new System.EventHandler(this.CropImageToolStripMenuItem_Click);
             // 
@@ -331,9 +331,16 @@
             // checkTextFileToolStripMenuItem
             // 
             this.checkTextFileToolStripMenuItem.Name = "checkTextFileToolStripMenuItem";
-            this.checkTextFileToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
+            this.checkTextFileToolStripMenuItem.Size = new System.Drawing.Size(218, 22);
             this.checkTextFileToolStripMenuItem.Text = "Check text file";
             this.checkTextFileToolStripMenuItem.Click += new System.EventHandler(this.checkTextFileToolStripMenuItem_Click);
+            // 
+            // moveFileNotAnnotatedToolStripMenuItem
+            // 
+            this.moveFileNotAnnotatedToolStripMenuItem.Name = "moveFileNotAnnotatedToolStripMenuItem";
+            this.moveFileNotAnnotatedToolStripMenuItem.Size = new System.Drawing.Size(218, 22);
+            this.moveFileNotAnnotatedToolStripMenuItem.Text = "Move image has not object";
+            this.moveFileNotAnnotatedToolStripMenuItem.Click += new System.EventHandler(this.moveFileNotAnnotatedToolStripMenuItem_Click);
             // 
             // MenuStrip1
             // 
@@ -557,13 +564,6 @@
             this.bgCrop.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgCrop_DoWork);
             this.bgCrop.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.bgCrop_ProgressChanged);
             this.bgCrop.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgCrop_RunWorkerCompleted);
-            // 
-            // moveFileNotAnnotatedToolStripMenuItem
-            // 
-            this.moveFileNotAnnotatedToolStripMenuItem.Name = "moveFileNotAnnotatedToolStripMenuItem";
-            this.moveFileNotAnnotatedToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
-            this.moveFileNotAnnotatedToolStripMenuItem.Text = "Move file not annotated";
-            this.moveFileNotAnnotatedToolStripMenuItem.Click += new System.EventHandler(this.moveFileNotAnnotatedToolStripMenuItem_Click);
             // 
             // Form1
             // 

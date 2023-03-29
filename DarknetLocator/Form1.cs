@@ -1688,7 +1688,7 @@ namespace DarknetLocator
             folderBrowser.CheckFileExists = false;
             folderBrowser.CheckPathExists = true;
             // Always default to Folder Selection.
-            folderBrowser.FileName = "Select folder";
+            folderBrowser.Title = "Select target folder";
             if (folderBrowser.ShowDialog() != DialogResult.OK)
             {
                 return;
@@ -1702,15 +1702,28 @@ namespace DarknetLocator
             foreach (ListViewItem f in lstImg.Items)
             {
 
-                string txtPath = currentDir + f.Text;
-                txtPath = txtPath.Replace(Path.GetExtension(txtPath), ".txt");
+                string imgPath = currentDir + f.Text;
+                string txtPath = imgPath.Replace(Path.GetExtension(imgPath), ".txt");
                 if(!File.Exists(txtPath))
-                {
-                    string filePath = currentDir + f.Text;
-                    string newPath = saveDir + f.Text;
-                    TGMTfile.MoveFileAsync(filePath, newPath);
+                {                   
+                    string newImgPath = saveDir + f.Text;
+                    TGMTfile.MoveFileAsync(imgPath, newImgPath);
 
                     count++;
+                }
+                else
+                {
+                    string[] lines = File.ReadAllLines(txtPath);
+                    if(lines.Length == 0)
+                    {
+                        string newImgPath = saveDir + f.Text;
+                        TGMTfile.MoveFileAsync(imgPath, newImgPath);
+
+                        string newTxtPath = newImgPath.Replace(Path.GetExtension(newImgPath), ".txt");
+                        TGMTfile.MoveFileAsync(txtPath, newTxtPath);
+
+                        count += 2;
+                    }
                 }
             }
             MessageBox.Show("Moved " + count + " files");
