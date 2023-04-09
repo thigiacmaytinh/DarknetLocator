@@ -65,6 +65,9 @@ namespace DarknetLocator
         int m_lastSearchIndex = 0;
         string m_lastSearch = "";
 
+        bool m_isTextboxFocused = false;
+        bool m_isListboxFocused = false;
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         #region COMMON
@@ -391,8 +394,8 @@ namespace DarknetLocator
                 string txtPath = TGMTutil.CorrectPath(txtFolder.Text) + mCurrentImgName.Replace(Path.GetExtension(mCurrentImgName), ".txt");
                 File.WriteAllText(txtPath, content);
             }
-                
-            lblMessage.Text = "Saved";
+
+            PrintSuccess("Saved");            
             timerClear.Start();
         }
 
@@ -565,6 +568,40 @@ namespace DarknetLocator
 
             checkTextFileToolStripMenuItem.Visible = false;
             RectangleToolStripMenuItem.Visible = false;
+
+            txtFolder.GotFocus += TxtFolder_GotFocus;
+            txtFolder.LostFocus += TxtFolder_LostFocus;
+
+            lstImg.GotFocus += LstImg_GotFocus;
+            lstImg.LostFocus += LstImg_LostFocus;
+        }        
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        private void TxtFolder_GotFocus(object sender, EventArgs e)
+        {
+            m_isTextboxFocused = true;
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        private void TxtFolder_LostFocus(object sender, EventArgs e)
+        {
+            m_isTextboxFocused = false;
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        private void LstImg_GotFocus(object sender, EventArgs e)
+        {
+            m_isListboxFocused = true;
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        private void LstImg_LostFocus(object sender, EventArgs e)
+        {
+            m_isListboxFocused = false;
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -606,6 +643,9 @@ namespace DarknetLocator
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
+            if (m_isTextboxFocused)
+                return;
+
             if (e.KeyCode == Keys.Enter)
             {
                 if (lstImg.SelectedIndices[0] < lstImg.Items.Count - 1)
@@ -747,6 +787,10 @@ namespace DarknetLocator
                 {
                     ResizeRect(2, 0);
                 }
+            }
+            else
+            {
+                e.Handled = false;
             }
             
         }
@@ -906,11 +950,6 @@ namespace DarknetLocator
                     }
                     txtCount.Text = lstRect.Items.Count.ToString();
                 }
-            }
-
-            if(lstRect.Items.Count > 0 )
-            {
-                lstRect.SelectedIndex = 0;
             }
         }
 
