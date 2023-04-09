@@ -156,7 +156,7 @@ namespace DarknetLocator
             double h = rect.Height * g_scaleY / m_img.Height;
             double cx = x + w / 2;
             double cy = y + h / 2;
-            lstRect.Items[lstRect.SelectedIndex] = cb_classes.SelectedIndex + " " + cx + " " +  cy + " " + w + " " + h;
+            lstRect.Items[lstRect.SelectedIndex] = cb_classes.SelectedIndex + " " + cx + " " + cy + " " + w + " " + h;
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -395,7 +395,7 @@ namespace DarknetLocator
                 File.WriteAllText(txtPath, content);
             }
 
-            PrintSuccess("Saved");            
+            PrintSuccess("Saved");
             timerClear.Start();
         }
 
@@ -411,7 +411,7 @@ namespace DarknetLocator
             if (!Directory.Exists(txtFolder.Text))
                 return;
 
-            var allowedExtensions = new[] { ".jpg", ".png", ".bmp", ".JPG", ".PNG", ".BMP"};
+            var allowedExtensions = new[] { ".jpg", ".png", ".bmp", ".JPG", ".PNG", ".BMP" };
             var fileList = Directory.GetFiles(txtFolder.Text)
                 .Where(file => allowedExtensions.Any(file.ToLower().EndsWith)).ToList();
 
@@ -425,9 +425,9 @@ namespace DarknetLocator
             {
 
                 //if (!TGMTimage.IsImage(filePath))
-                    //continue;
+                //continue;
 
-                
+
 
                 string fileName = Path.GetFileName(filePath);
                 lstImg.Items.Add(fileName);
@@ -500,7 +500,7 @@ namespace DarknetLocator
             }
             else
             {
-                lblLstImg.Text =  "0 / " + lstImg.Items.Count;
+                lblLstImg.Text = "0 / " + lstImg.Items.Count;
             }
         }
 
@@ -554,7 +554,7 @@ namespace DarknetLocator
 
             TGMTregistry.GetInstance().Init("DarknetLocator");
             txtFolder.Text = TGMTregistry.GetInstance().ReadString("folderPath");
- 
+
 
             this.KeyPreview = true;
             this.Location = new Point(10, 10);
@@ -574,7 +574,7 @@ namespace DarknetLocator
 
             lstImg.GotFocus += LstImg_GotFocus;
             lstImg.LostFocus += LstImg_LostFocus;
-        }        
+        }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -616,7 +616,7 @@ namespace DarknetLocator
             if (File.Exists(classPath))
             {
                 m_classes = File.ReadAllLines(classPath);
-                for(int i = 0; i< m_classes.Length; i++)
+                for (int i = 0; i < m_classes.Length; i++)
                 {
                     cb_classes.Items.Add(m_classes[i]);
                 }
@@ -625,9 +625,9 @@ namespace DarknetLocator
             {
                 m_classes = new string[]{"dog", "person", "cat", "tv", "car", "meatballs", "marinara sauce",
                     "tomato soup", "chicken noodle soup", "french onion soup", "chicken breast", "ribs", "pulled pork", "hamburger", "cavity"};
-                cb_classes.Items.AddRange(m_classes);                
+                cb_classes.Items.AddRange(m_classes);
 
-                File.WriteAllLines(classPath, m_classes); 
+                File.WriteAllLines(classPath, m_classes);
             }
             cb_classes.SelectedIndex = 0;
         }
@@ -648,15 +648,18 @@ namespace DarknetLocator
 
             if (e.KeyCode == Keys.Enter)
             {
-                if (lstImg.SelectedIndices[0] < lstImg.Items.Count - 1)
-                {
-                    CompleteEdit();
-
-                    int newIndex = lstImg.SelectedIndices[0] + 1;
-                    lstImg.Items[newIndex].Selected = true;
-                    lstImg.EnsureVisible(newIndex);
-                    lstImg.Focus();
-                }
+                //if(m_isListboxFocused)
+                //{
+                //    if (lstRect.Items.Count > 0)
+                //    {
+                //        lstRect.SelectedIndex = 0;
+                //        lstRect.Focus();
+                //    }
+                //}
+                //else
+                //{
+                //    lstImg.Focus();
+                //}
             }
             else if (e.KeyCode == Keys.Delete)
             {
@@ -685,6 +688,7 @@ namespace DarknetLocator
                 if (lstRect.Items.Count > 0)
                 {
                     lstRect.SelectedIndex = (lstRect.SelectedIndex + 1) % lstRect.Items.Count;
+                    lstRect.Focus();
                 }
             }
             else if ((e.KeyCode >= Keys.D0 && e.KeyCode <= Keys.D9) )
@@ -795,11 +799,22 @@ namespace DarknetLocator
             
         }
 
-#endregion
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        private void Form1_KeyUp(object sender, KeyEventArgs e)
+        {
+            if(e.KeyCode == Keys.Tab)
+            {
+                lstRect.SelectedIndex = 0;
+                lstImg.EnsureVisible(0);                
+            }
+        }
+
+        #endregion
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#region CONTROL
+        #region CONTROL
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -958,6 +973,10 @@ namespace DarknetLocator
 
         private void lstImg_KeyDown(object sender, KeyEventArgs e)
         {
+            if (!m_isListboxFocused)
+                return;
+
+            int selectedIndex = lstImg.SelectedIndices[0];
             if (e.KeyCode == Keys.Delete)
             {
                 if (lstImg.SelectedIndices.Count > 0 && lstRect.SelectedIndex == -1)
@@ -978,6 +997,38 @@ namespace DarknetLocator
                     else
                     {
                         lstImg.Items[lstImg.Items.Count - 1].Selected = true;
+                    }
+                }
+            }            
+            else if (e.KeyCode == Keys.Up)
+            {
+                if (selectedIndex > 0)
+                {
+                    lstImg.Items[selectedIndex - 1].Selected = true;
+                    lstImg.EnsureVisible(selectedIndex - 1);
+                }
+                return;
+            }
+            else if (e.KeyCode == Keys.Down)
+            {
+                if (selectedIndex < lstImg.Items.Count - 1)
+                {
+                    lstImg.Items[selectedIndex + 1].Selected = true;
+                    lstImg.EnsureVisible(selectedIndex + 1);
+                }
+                return;
+            }
+            else if (e.KeyCode == Keys.Enter)
+            {
+                CompleteEdit();
+                if (lstImg.SelectedIndices.Count > 0)
+                {
+                    int nextIndex = lstImg.SelectedIndices[0] + 1;
+                    if (nextIndex < lstImg.Items.Count)
+                    {
+                        lstImg.Items[nextIndex].Selected = true;
+                        lstImg.EnsureVisible(nextIndex);
+                        lstImg.Focus();
                     }
                 }
             }
@@ -1011,6 +1062,21 @@ namespace DarknetLocator
                 }
                 CompleteEdit();
                 PictureBox1.Refresh();
+            }
+            else if(e.KeyCode == Keys.Enter)
+            {
+                CompleteEdit();
+                lstRect.SelectedIndex = -1;               
+                if(lstImg.SelectedIndices.Count > 0)
+                {
+                    int nextIndex = lstImg.SelectedIndices[0];
+                    if(nextIndex < lstImg.Items.Count)
+                    {
+                        lstImg.Items[nextIndex].Selected = true;
+                        lstImg.EnsureVisible(nextIndex);
+                        lstImg.Focus();
+                    }                    
+                }
             }
         }
 
@@ -1497,6 +1563,8 @@ namespace DarknetLocator
                     lstRect.Items[lstRect.SelectedIndex] = elements;
                     CompleteEdit();
                 }
+                                
+                lstRect.Focus();
             }            
         }
 
@@ -1768,5 +1836,7 @@ namespace DarknetLocator
             MessageBox.Show("Moved " + count + " files");
 
         }
+
+        
     }
 }
