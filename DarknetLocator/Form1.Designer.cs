@@ -433,6 +433,7 @@
             this.btn_addClass.Name = "btn_addClass";
             this.btn_addClass.Size = new System.Drawing.Size(32, 26);
             this.btn_addClass.TabIndex = 52;
+            this.btn_addClass.TabStop = false;
             this.btn_addClass.Text = "+";
             this.btn_addClass.UseVisualStyleBackColor = true;
             this.btn_addClass.Click += new System.EventHandler(this.btn_addClass_Click);
@@ -445,6 +446,7 @@
             this.cb_classes.Name = "cb_classes";
             this.cb_classes.Size = new System.Drawing.Size(131, 23);
             this.cb_classes.TabIndex = 51;
+            this.cb_classes.TabStop = false;
             this.cb_classes.SelectedIndexChanged += new System.EventHandler(this.cb_classes_SelectedIndexChanged);
             // 
             // numMinHeight

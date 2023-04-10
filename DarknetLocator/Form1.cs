@@ -645,19 +645,7 @@ namespace DarknetLocator
             if (m_isTextboxFocused)
                 return;
 
-
-            if (e.KeyCode == Keys.Delete)
-            {
-                if (!lstRect.Focused && lstRect.Items.Count > 0 && lstRect.SelectedIndex > -1)
-                {
-                    lstRect_KeyDown(sender, e);
-                }
-                else if (!lstImg.Focused && lstImg.Items.Count > 0 && lstImg.SelectedIndices.Count > 0)
-                {
-                    lstImg_KeyDown(sender, e);
-                }
-            }
-            else if (e.Control && e.KeyCode == Keys.S)
+             if (e.Control && e.KeyCode == Keys.S)
             {
                 SaveToFile();
             }
@@ -780,8 +768,7 @@ namespace DarknetLocator
             else
             {
                 e.Handled = false;
-            }
-            
+            }            
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -860,18 +847,11 @@ namespace DarknetLocator
             }
 
 
+            string imgName = lstImg.SelectedItems[0].Text.ToString();
+            if (imgName == mCurrentImgName)
+                return;
 
-            //string line = lstImg.SelectedItem.ToString();
-            //string[] lineSplit = line.Split(' ');
-
-            //if (mCurrentImgName == lineSplit[0])
-            //    return;
-
-            mCurrentImgName = lstImg.SelectedItems[0].Text.ToString();
-
-
-
-
+            mCurrentImgName = imgName;
 
 
             string imgPath = TGMTutil.CorrectPath(txtFolder.Text) + mCurrentImgName;
@@ -892,7 +872,7 @@ namespace DarknetLocator
 
             m_img = TGMTimage.LoadBitmapWithoutLock(imgPath);
             PictureBox1.Image = m_img;
-            lblLstImg.Text = lstImg.SelectedIndices[0] + 1 + " / " + lstImg.Items.Count;
+            lblLstImg.Text = (lstImg.SelectedIndices[0] + 1) + " / " + lstImg.Items.Count;
 
 
             g_aspect = (double)m_img.Width / (double)m_img.Height;
@@ -925,28 +905,21 @@ namespace DarknetLocator
                     if (lineSplit.Length == 5)
                     {
                         int classID = int.Parse(lineSplit[0]);
-                        //if (totalRect * 4 > lineSplit.Length - 2)
-                        //{
-                        //    int trueRect = (lineSplit.Length - 2) / 4;
-                        //    MessageBox.Show("Has error about rectangle count. Correct count: " + totalRect + " -> " + trueRect);
-                        //    totalRect = trueRect;
-                        //}
-                        //for (int i = 0; i <= totalRect - 1; i++)
-                        {
-                            double cx = double.Parse(lineSplit[1]);
-                            double cy = double.Parse(lineSplit[2]);                            
-                            double w = double.Parse(lineSplit[3]);
-                            double h = double.Parse(lineSplit[4]);
-                            double x = cx - w / 2;
-                            double y = cy - h / 2;
+                        
+                        double cx = double.Parse(lineSplit[1]);
+                        double cy = double.Parse(lineSplit[2]);
+                        double w = double.Parse(lineSplit[3]);
+                        double h = double.Parse(lineSplit[4]);
+                        double x = cx - w / 2;
+                        double y = cy - h / 2;
 
-                            mRects.Add(new Rectangle(
-                                (int)(x * m_img.Width / g_scaleX),
-                                (int)(y * m_img.Height / g_scaleY),
-                                (int)(w * m_img.Width / g_scaleX),
-                                (int)(h * m_img.Height / g_scaleY)));
+                        mRects.Add(new Rectangle(
+                            (int)(x * m_img.Width / g_scaleX),
+                            (int)(y * m_img.Height / g_scaleY),
+                            (int)(w * m_img.Width / g_scaleX),
+                            (int)(h * m_img.Height / g_scaleY)));
 
-                        }
+                        
                     }
                     txtCount.Text = lstRect.Items.Count.ToString();
                 }
@@ -986,7 +959,7 @@ namespace DarknetLocator
                         lstImg.Items[lstImg.Items.Count - 1].Selected = true;
                     }
                 }
-            }            
+            }
             else if (e.KeyCode == Keys.Up)
             {
                 if (selectedIndex > 0)
@@ -1007,16 +980,10 @@ namespace DarknetLocator
             }
             else if (e.KeyCode == Keys.Enter)
             {
-                CompleteEdit();
-                if (lstImg.SelectedIndices.Count > 0)
+                if(lstRect.Items.Count > 0)
                 {
-                    int nextIndex = lstImg.SelectedIndices[0] + 1;
-                    if (nextIndex < lstImg.Items.Count)
-                    {
-                        lstImg.Items[nextIndex].Selected = true;
-                        lstImg.EnsureVisible(nextIndex);
-                        lstImg.Focus();
-                    }
+                    lstRect.SelectedIndex = 0;
+                    lstRect.Focus();
                 }
             }
             else
@@ -1032,37 +999,42 @@ namespace DarknetLocator
         private void lstRect_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down)
+            {
                 e.Handled = true;
-            else if (e.KeyCode == Keys.Delete && lstRect.Items.Count > 0 && lstRect.SelectedIndex > -1)
+            }                
+            else if (e.KeyCode == Keys.Delete)
             {
-                int index = lstRect.SelectedIndex;
-                lstRect.Items.RemoveAt(index);
-                mRects.RemoveAt(index);
-                txtCount.Text = lstRect.Items.Count.ToString();
-                if (index > -1 & index < lstRect.Items.Count)
+                if (lstRect.Items.Count > 0 && lstRect.SelectedIndex > -1)
                 {
-                    lstRect.SelectedIndex = index;
+                    int index = lstRect.SelectedIndex;
+                    lstRect.Items.RemoveAt(index);
+                    mRects.RemoveAt(index);
+                    txtCount.Text = lstRect.Items.Count.ToString();
+                    if (index > -1 & index < lstRect.Items.Count)
+                    {
+                        lstRect.SelectedIndex = index;
+                    }
+                    else if (index == lstRect.Items.Count)
+                    {
+                        lstRect.SelectedIndex = lstRect.Items.Count - 1;
+                    }
+                    CompleteEdit();
+                    PictureBox1.Refresh();
                 }
-                else if (index == lstRect.Items.Count)
-                {
-                    lstRect.SelectedIndex = lstRect.Items.Count - 1;
-                }
-                CompleteEdit();
-                PictureBox1.Refresh();
             }
-            else if(e.KeyCode == Keys.Enter)
+            else if (e.KeyCode == Keys.Enter)
             {
                 CompleteEdit();
-                lstRect.SelectedIndex = -1;               
-                if(lstImg.SelectedIndices.Count > 0)
+                lstRect.SelectedIndex = -1;
+                if (lstImg.SelectedIndices.Count > 0)
                 {
                     int nextIndex = lstImg.SelectedIndices[0];
-                    if(nextIndex < lstImg.Items.Count)
+                    if (nextIndex < lstImg.Items.Count)
                     {
                         lstImg.Items[nextIndex].Selected = true;
                         lstImg.EnsureVisible(nextIndex);
                         lstImg.Focus();
-                    }                    
+                    }
                 }
             }
         }
