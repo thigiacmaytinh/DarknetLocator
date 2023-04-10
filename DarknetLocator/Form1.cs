@@ -65,7 +65,6 @@ namespace DarknetLocator
         string m_lastSearch = "";
 
         bool m_isTextboxFocused = false;
-        bool m_isListboxFocused = false;
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -567,40 +566,6 @@ namespace DarknetLocator
 
             checkTextFileToolStripMenuItem.Visible = false;
             RectangleToolStripMenuItem.Visible = false;
-
-            txtFolder.GotFocus += TxtFolder_GotFocus;
-            txtFolder.LostFocus += TxtFolder_LostFocus;
-
-            lstImg.GotFocus += LstImg_GotFocus;
-            lstImg.LostFocus += LstImg_LostFocus;
-        }
-
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        private void TxtFolder_GotFocus(object sender, EventArgs e)
-        {
-            m_isTextboxFocused = true;
-        }
-
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        private void TxtFolder_LostFocus(object sender, EventArgs e)
-        {
-            m_isTextboxFocused = false;
-        }
-
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        private void LstImg_GotFocus(object sender, EventArgs e)
-        {
-            m_isListboxFocused = true;
-        }
-
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        private void LstImg_LostFocus(object sender, EventArgs e)
-        {
-            m_isListboxFocused = false;
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -645,7 +610,8 @@ namespace DarknetLocator
             if (m_isTextboxFocused)
                 return;
 
-             if (e.Control && e.KeyCode == Keys.S)
+
+            if (e.Control && e.KeyCode == Keys.S)
             {
                 SaveToFile();
             }
@@ -655,28 +621,28 @@ namespace DarknetLocator
                 {
                     lstRect.SelectedIndex = 0;
                 }
-            }            
-            else if (e.KeyCode == Keys.Tab)
-            {
-                if (lstRect.Items.Count > 0)
-                {
-                    lstRect.SelectedIndex = (lstRect.SelectedIndex + 1) % lstRect.Items.Count;
-                    lstRect.Focus();
-                }
             }
-            else if ((e.KeyCode >= Keys.D0 && e.KeyCode <= Keys.D9) )
+            else if (e.KeyCode == Keys.Enter)
             {
                 if(lstRect.SelectedIndex > -1)
                 {
+                    lstRect_KeyDown(sender, e);
+                    return;
+                }
+            }
+            else if ((e.KeyCode >= Keys.D0 && e.KeyCode <= Keys.D9))
+            {
+                if (lstRect.SelectedIndex > -1)
+                {
                     int newClass = (int)e.KeyCode - 48;
-                    if(newClass < cb_classes.Items.Count)
+                    if (newClass < cb_classes.Items.Count)
                     {
                         cb_classes.SelectedIndex = newClass;
                         CompleteEdit();
                     }
                 }
             }
-            else if ( (e.KeyCode >= Keys.NumPad0 && e.KeyCode <= Keys.NumPad9))
+            else if ((e.KeyCode >= Keys.NumPad0 && e.KeyCode <= Keys.NumPad9))
             {
                 if (lstRect.SelectedIndex > -1)
                 {
@@ -688,7 +654,7 @@ namespace DarknetLocator
                     }
                 }
             }
-            else if(e.KeyCode == Keys.A)
+            else if (e.KeyCode == Keys.A)
             {
                 int currentIdx = lstImg.SelectedIndices[0];
                 if (currentIdx > 0)
@@ -718,7 +684,7 @@ namespace DarknetLocator
             }
             else if (e.KeyCode == Keys.F)
             {
-                if(e.Control)
+                if (e.Control)
                 {
                     SearchFile();
                 }
@@ -931,9 +897,6 @@ namespace DarknetLocator
 
         private void lstImg_KeyDown(object sender, KeyEventArgs e)
         {
-            if (!m_isListboxFocused)
-                return;
-
             int selectedIndex = lstImg.SelectedIndices[0];
             if (e.KeyCode == Keys.Delete)
             {
@@ -962,6 +925,12 @@ namespace DarknetLocator
             }
             else if (e.KeyCode == Keys.Up)
             {
+                if (lstRect.SelectedIndex > -1)
+                {
+                    e.Handled = true;
+                    return;
+                }
+
                 if (selectedIndex > 0)
                 {
                     lstImg.Items[selectedIndex - 1].Selected = true;
@@ -971,20 +940,18 @@ namespace DarknetLocator
             }
             else if (e.KeyCode == Keys.Down)
             {
+                if (lstRect.SelectedIndex > -1)
+                {
+                    e.Handled = true;
+                    return;
+                }                    
+
                 if (selectedIndex < lstImg.Items.Count - 1)
                 {
                     lstImg.Items[selectedIndex + 1].Selected = true;
                     lstImg.EnsureVisible(selectedIndex + 1);
                 }
                 return;
-            }
-            else if (e.KeyCode == Keys.Enter)
-            {
-                if(lstRect.Items.Count > 0)
-                {
-                    lstRect.SelectedIndex = 0;
-                    lstRect.Focus();
-                }
             }
             else
             {
@@ -1028,7 +995,7 @@ namespace DarknetLocator
                 lstRect.SelectedIndex = -1;
                 if (lstImg.SelectedIndices.Count > 0)
                 {
-                    int nextIndex = lstImg.SelectedIndices[0];
+                    int nextIndex = lstImg.SelectedIndices[0] + 1;
                     if (nextIndex < lstImg.Items.Count)
                     {
                         lstImg.Items[nextIndex].Selected = true;
