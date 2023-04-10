@@ -53,7 +53,6 @@ namespace DarknetLocator
 
         //use for draw on picture box
         List<Rectangle> mRects = new List<Rectangle>();
-        string TRACKING_HOST = "http://viscomsolution.com/tracking/tracking_darknetlocator.php";
         Image m_img;
 
         Font myFont = new Font("Arial", 14);
@@ -646,22 +645,8 @@ namespace DarknetLocator
             if (m_isTextboxFocused)
                 return;
 
-            if (e.KeyCode == Keys.Enter)
-            {
-                //if(m_isListboxFocused)
-                //{
-                //    if (lstRect.Items.Count > 0)
-                //    {
-                //        lstRect.SelectedIndex = 0;
-                //        lstRect.Focus();
-                //    }
-                //}
-                //else
-                //{
-                //    lstImg.Focus();
-                //}
-            }
-            else if (e.KeyCode == Keys.Delete)
+
+            if (e.KeyCode == Keys.Delete)
             {
                 if (!lstRect.Focused && lstRect.Items.Count > 0 && lstRect.SelectedIndex > -1)
                 {
@@ -983,12 +968,14 @@ namespace DarknetLocator
                 {
                     int index = lstImg.SelectedIndices[0];
                     string imagePath = TGMTutil.CorrectPath(txtFolder.Text) + lstImg.Items[index].Text;
-                    
+                    string txtPath = imagePath.Replace(Path.GetExtension(imagePath), ".txt");
+
 
                     lstImg.Items.RemoveAt(lstImg.SelectedIndices[0]);
                     lstRect.Items.Clear();
 
                     TGMTfile.MoveFileToRecycleBin(imagePath);
+                    TGMTfile.MoveFileToRecycleBin(txtPath);
 
                     if (index < lstImg.Items.Count)
                     {
@@ -1594,6 +1581,8 @@ namespace DarknetLocator
         {
             DeleteFile();
         }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         void DeleteFile()
         {

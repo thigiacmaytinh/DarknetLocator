@@ -113,7 +113,7 @@
             // btnSelectFolder
             // 
             this.btnSelectFolder.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnSelectFolder.Location = new System.Drawing.Point(293, 16);
+            this.btnSelectFolder.Location = new System.Drawing.Point(308, 16);
             this.btnSelectFolder.Name = "btnSelectFolder";
             this.btnSelectFolder.Size = new System.Drawing.Size(34, 26);
             this.btnSelectFolder.TabIndex = 29;
@@ -125,9 +125,9 @@
             // 
             // txtFolder
             // 
-            this.txtFolder.Location = new System.Drawing.Point(34, 19);
+            this.txtFolder.Location = new System.Drawing.Point(3, 19);
             this.txtFolder.Name = "txtFolder";
-            this.txtFolder.Size = new System.Drawing.Size(259, 20);
+            this.txtFolder.Size = new System.Drawing.Size(299, 20);
             this.txtFolder.TabIndex = 28;
             this.txtFolder.TabStop = false;
             this.ToolTip1.SetToolTip(this.txtFolder, "Folder chứa ảnh");
