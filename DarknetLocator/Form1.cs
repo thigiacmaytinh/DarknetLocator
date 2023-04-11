@@ -550,7 +550,7 @@ namespace DarknetLocator
             ANCHOR_SIZE = new Size(ANCHOR_WIDTH, ANCHOR_WIDTH);
 
 
-            TGMTregistry.GetInstance().Init("DarknetLocator");
+            
             txtFolder.Text = TGMTregistry.GetInstance().ReadString("folderPath");
 
 
@@ -656,23 +656,29 @@ namespace DarknetLocator
             }
             else if (e.KeyCode == Keys.A)
             {
-                int currentIdx = lstImg.SelectedIndices[0];
-                if (currentIdx > 0)
+                if(lstImg.SelectedIndices.Count > 0)
                 {
+                    int currentIdx = lstImg.SelectedIndices[0];
+                    if (currentIdx > 0)
+                    {
 
-                    lstImg.Items[currentIdx - 1].Selected = true;
-                    lstImg.EnsureVisible(currentIdx - 1);
-                }
+                        lstImg.Items[currentIdx - 1].Selected = true;
+                        lstImg.EnsureVisible(currentIdx - 1);
+                    }
+                }                
             }
             else if (e.KeyCode == Keys.D)
             {
-                int currentIdx = lstImg.SelectedIndices[0];
-                if (currentIdx < lstImg.Items.Count - 1)
+                if (lstImg.SelectedIndices.Count > 0)
                 {
+                    int currentIdx = lstImg.SelectedIndices[0];
+                    if (currentIdx < lstImg.Items.Count - 1)
+                    {
 
-                    lstImg.Items[currentIdx + 1].Selected = true;
-                    lstImg.EnsureVisible(currentIdx + 1);
-                }
+                        lstImg.Items[currentIdx + 1].Selected = true;
+                        lstImg.EnsureVisible(currentIdx + 1);
+                    }
+                }                    
             }
             else if (e.KeyCode == Keys.Q)
             {
@@ -1102,11 +1108,19 @@ namespace DarknetLocator
             progressBar1.Value = progressBar1.Minimum;
         }
 
-#endregion
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////
+        
+        private void removeClassToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormClasses fm = new FormClasses();
+            fm.ShowDialog();
+        }
+
+        #endregion
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#region PICTURE_BOX
+        #region PICTURE_BOX
 
 
         private void PictureBox1_Paint(object sender, PaintEventArgs e)

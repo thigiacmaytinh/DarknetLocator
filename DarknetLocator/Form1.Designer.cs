@@ -78,6 +78,7 @@
             this.timerClear = new System.Windows.Forms.Timer(this.components);
             this.timerAutoSave = new System.Windows.Forms.Timer(this.components);
             this.bgCrop = new System.ComponentModel.BackgroundWorker();
+            this.removeClassToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.PictureBox1)).BeginInit();
             this.ctx_images.SuspendLayout();
             this.MenuStrip1.SuspendLayout();
@@ -323,7 +324,8 @@
             this.ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.CropImageToolStripMenuItem,
             this.checkTextFileToolStripMenuItem,
-            this.moveFileNotAnnotatedToolStripMenuItem});
+            this.moveFileNotAnnotatedToolStripMenuItem,
+            this.removeClassToolStripMenuItem});
             this.ToolStripMenuItem.Name = "ToolStripMenuItem";
             this.ToolStripMenuItem.Size = new System.Drawing.Size(41, 20);
             this.ToolStripMenuItem.Text = "Tool";
@@ -567,6 +569,13 @@
             this.bgCrop.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.bgCrop_ProgressChanged);
             this.bgCrop.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgCrop_RunWorkerCompleted);
             // 
+            // removeClassToolStripMenuItem
+            // 
+            this.removeClassToolStripMenuItem.Name = "removeClassToolStripMenuItem";
+            this.removeClassToolStripMenuItem.Size = new System.Drawing.Size(218, 22);
+            this.removeClassToolStripMenuItem.Text = "Remove class";
+            this.removeClassToolStripMenuItem.Click += new System.EventHandler(this.removeClassToolStripMenuItem_Click);
+            // 
             // Form1
             // 
             this.AllowDrop = true;
@@ -653,6 +662,7 @@
         internal System.Windows.Forms.Button btn_search;
         internal System.Windows.Forms.TextBox txtSearch;
         private System.Windows.Forms.ToolStripMenuItem moveFileNotAnnotatedToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem removeClassToolStripMenuItem;
     }
 }
 

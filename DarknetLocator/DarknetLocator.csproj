@@ -59,6 +59,12 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormClasses.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormClasses.Designer.cs">
+      <DependentUpon>FormClasses.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmExpand.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -81,6 +87,9 @@
     <Compile Include="TGMTutil.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormClasses.resx">
+      <DependentUpon>FormClasses.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmExpand.resx">
       <DependentUpon>frmExpand.cs</DependentUpon>
