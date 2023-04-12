@@ -635,7 +635,7 @@ namespace DarknetLocator
                 if (lstRect.SelectedIndex > -1)
                 {
                     int newClass = (int)e.KeyCode - 48;
-                    if (newClass < cb_classes.Items.Count)
+                    if (newClass < cb_classes.Items.Count && newClass != cb_classes.SelectedIndex)
                     {
                         cb_classes.SelectedIndex = newClass;
                     }
@@ -971,6 +971,7 @@ namespace DarknetLocator
             else if(e.KeyCode >= Keys.D0 && e.KeyCode <= Keys.D9)
             {
                 e.Handled = true;
+                e.SuppressKeyPress = true;
             }
             else if (e.KeyCode == Keys.Delete)
             {

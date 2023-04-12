@@ -55,6 +55,7 @@
             this.ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.checkTextFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.moveFileNotAnnotatedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.removeClassToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuStrip1 = new System.Windows.Forms.MenuStrip();
             this.RectangleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.GroupBox1 = new System.Windows.Forms.GroupBox();
@@ -78,7 +79,6 @@
             this.timerClear = new System.Windows.Forms.Timer(this.components);
             this.timerAutoSave = new System.Windows.Forms.Timer(this.components);
             this.bgCrop = new System.ComponentModel.BackgroundWorker();
-            this.removeClassToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.PictureBox1)).BeginInit();
             this.ctx_images.SuspendLayout();
             this.MenuStrip1.SuspendLayout();
@@ -344,6 +344,13 @@
             this.moveFileNotAnnotatedToolStripMenuItem.Text = "Move image has not object";
             this.moveFileNotAnnotatedToolStripMenuItem.Click += new System.EventHandler(this.moveFileNotAnnotatedToolStripMenuItem_Click);
             // 
+            // removeClassToolStripMenuItem
+            // 
+            this.removeClassToolStripMenuItem.Name = "removeClassToolStripMenuItem";
+            this.removeClassToolStripMenuItem.Size = new System.Drawing.Size(218, 22);
+            this.removeClassToolStripMenuItem.Text = "Remove class";
+            this.removeClassToolStripMenuItem.Click += new System.EventHandler(this.removeClassToolStripMenuItem_Click);
+            // 
             // MenuStrip1
             // 
             this.MenuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
@@ -568,13 +575,6 @@
             this.bgCrop.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgCrop_DoWork);
             this.bgCrop.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.bgCrop_ProgressChanged);
             this.bgCrop.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgCrop_RunWorkerCompleted);
-            // 
-            // removeClassToolStripMenuItem
-            // 
-            this.removeClassToolStripMenuItem.Name = "removeClassToolStripMenuItem";
-            this.removeClassToolStripMenuItem.Size = new System.Drawing.Size(218, 22);
-            this.removeClassToolStripMenuItem.Text = "Remove class";
-            this.removeClassToolStripMenuItem.Click += new System.EventHandler(this.removeClassToolStripMenuItem_Click);
             // 
             // Form1
             // 
