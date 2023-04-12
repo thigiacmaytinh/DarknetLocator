@@ -609,7 +609,7 @@ namespace DarknetLocator
         {
             if (m_isTextboxFocused)
                 return;
-
+            
 
             if (e.Control && e.KeyCode == Keys.S)
             {
@@ -638,7 +638,6 @@ namespace DarknetLocator
                     if (newClass < cb_classes.Items.Count)
                     {
                         cb_classes.SelectedIndex = newClass;
-                        CompleteEdit();
                     }
                 }
             }
@@ -650,7 +649,6 @@ namespace DarknetLocator
                     if (newClass < cb_classes.Items.Count)
                     {
                         cb_classes.SelectedIndex = newClass;
-                        CompleteEdit();
                     }
                 }
             }
@@ -693,13 +691,6 @@ namespace DarknetLocator
                 if (e.Control)
                 {
                     SearchFile();
-                }
-            }
-            else if (lstRect.Items.Count == 0 && lstImg.Items.Count > 0)
-            {
-                if (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down)
-                {
-                    lstImg.Focus();
                 }
             }
             else if (lstRect.SelectedIndex > -1)
@@ -941,6 +932,7 @@ namespace DarknetLocator
                 {
                     lstImg.Items[selectedIndex - 1].Selected = true;
                     lstImg.EnsureVisible(selectedIndex - 1);
+                    e.Handled = true;
                 }
                 return;
             }
@@ -956,6 +948,7 @@ namespace DarknetLocator
                 {
                     lstImg.Items[selectedIndex + 1].Selected = true;
                     lstImg.EnsureVisible(selectedIndex + 1);
+                    e.Handled = true;
                 }
                 return;
             }
@@ -974,7 +967,11 @@ namespace DarknetLocator
             if (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down)
             {
                 e.Handled = true;
-            }                
+            }
+            else if(e.KeyCode >= Keys.D0 && e.KeyCode <= Keys.D9)
+            {
+                e.Handled = true;
+            }
             else if (e.KeyCode == Keys.Delete)
             {
                 if (lstRect.Items.Count > 0 && lstRect.SelectedIndex > -1)
@@ -1006,8 +1003,9 @@ namespace DarknetLocator
                     {
                         lstImg.Items[nextIndex].Selected = true;
                         lstImg.EnsureVisible(nextIndex);
-                        lstImg.Focus();
                     }
+                    lstImg.Focus();
+                    e.Handled = true;
                 }
             }
         }
@@ -1256,9 +1254,8 @@ namespace DarknetLocator
                         h * g_scaleY / m_img.Height);
                     lstRect.SelectedIndex = lstRect.Items.Count - 1;
                 }
-
-            }
-            CompleteEdit();
+                CompleteEdit();
+            }            
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -21,7 +21,7 @@ namespace DarknetLocator
 
             TGMTregistry.GetInstance().Init("DarknetLocator");
 
-            Application.Run(new FormClasses());
+            Application.Run(new Form1());
         }
     }
 }
