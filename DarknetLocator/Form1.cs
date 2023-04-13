@@ -1426,12 +1426,27 @@ namespace DarknetLocator
 
             for (int i = startIndex; i > 0; i--)
             {
-                if (lstImg.Items[i].ForeColor == Color.Red)
+                string filePath = TGMTutil.CorrectPath(txtFolder.Text) + lstImg.Items[i].Text;
+                string txtPath = filePath.Replace(Path.GetExtension(filePath), ".txt");
+                if(File.Exists(txtPath))
+                {
+                    string[] lines = File.ReadAllLines(txtPath);
+                    if (lines.Length == 0)
+                    {
+                        lstImg.Items[i].Selected = true;
+                        lstImg.EnsureVisible(i);
+                        lstImg.Focus();
+                        return;
+                    }
+                }
+                else
                 {
                     lstImg.Items[i].Selected = true;
                     lstImg.EnsureVisible(i);
+                    lstImg.Focus();
                     return;
                 }
+                
             }
         }
 
@@ -1475,12 +1490,27 @@ namespace DarknetLocator
                 startIndex = lstImg.SelectedIndices[0] + 1;
             for (int i = startIndex; i < lstImg.Items.Count; i++)
             {
-                if (lstImg.Items[i].ForeColor == Color.Red)
+                string filePath = TGMTutil.CorrectPath(txtFolder.Text) + lstImg.Items[i].Text;
+                string txtPath = filePath.Replace(Path.GetExtension(filePath), ".txt");
+                if(File.Exists(txtPath))
+                {
+                    string[] lines = File.ReadAllLines(txtPath);
+                    if (lines.Length == 0)
+                    {
+                        lstImg.Items[i].Selected = true;
+                        lstImg.EnsureVisible(i);
+                        lstImg.Focus();
+                        return;
+                    }
+                }
+                else
                 {
                     lstImg.Items[i].Selected = true;
                     lstImg.EnsureVisible(i);
+                    lstImg.Focus();
                     return;
                 }
+                
             }
         }
 
