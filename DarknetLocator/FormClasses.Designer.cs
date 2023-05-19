@@ -121,10 +121,12 @@
             // 
             this.bgLoadFile.WorkerReportsProgress = true;
             this.bgLoadFile.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgLoadFile_DoWork);
+            this.bgLoadFile.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgLoadFile_RunWorkerCompleted);
             // 
             // timerLoading
             // 
             this.timerLoading.Interval = 50;
+            this.timerLoading.Tick += new System.EventHandler(this.timerLoading_Tick);
             // 
             // statusStrip1
             // 

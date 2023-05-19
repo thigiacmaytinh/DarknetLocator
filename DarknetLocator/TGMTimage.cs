@@ -168,6 +168,16 @@ namespace TGMTcs
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        public static Image ResizeImageByWidth(Image image, int width)
+        {
+            float ratio = (float)image.Width / (float)image.Height;
+            int height = (int)((float)width / ratio);
+
+            return ResizeBitmap(image, width, height);
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+
         public static Bitmap CropBitmap(Bitmap bmp, Rectangle rect)
         {
             Bitmap target = new Bitmap(rect.Width, rect.Height);
@@ -199,6 +209,8 @@ namespace TGMTcs
 
         public static Bitmap LoadBitmapWithoutLock(string imagePath)
         {
+            if (!File.Exists(imagePath))
+                return null;
             var bytes = File.ReadAllBytes(imagePath);
             var ms = new MemoryStream(bytes);
             var img = Image.FromStream(ms);

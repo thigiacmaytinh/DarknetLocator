@@ -13,8 +13,9 @@ namespace DarknetLocator
 {
     public partial class FormClasses : Form
     {
-        List<string> m_classesToKeep;
-        List<string> m_classesToRemove;
+        List<string> m_classesToKeep = new List<string>();
+        List<string> m_classesToRemove = new List<string>();
+        List<string> m_classes = new List<string>();
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -27,7 +28,7 @@ namespace DarknetLocator
 
         private void FormClasses_Load(object sender, EventArgs e)
         {
-
+            txtFolder.Text = TGMTregistry.GetInstance().ReadString("folderPath");
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -73,7 +74,6 @@ namespace DarknetLocator
             }
 
             this.Enabled = false;
-            timerLoading.Start();
             lblMessage.Text = "Loading file...";
             TGMTregistry.GetInstance().SaveValue("folderPath", path);
 
@@ -111,14 +111,23 @@ namespace DarknetLocator
             if (File.Exists(classPath))
             {
                 string[] classes = File.ReadAllLines(classPath);
-                m_classesToKeep = new List<string>(classes);
+                if (classes.Length == 0)
+                {
+                    PrintError("File classes.txt is empty");
+                    return;
+                }
+                    
+
+                m_classes.AddRange(classes);
+
+                m_classesToKeep = new List<string>(m_classes);
                 for (int i = 0; i < classes.Length; i++)
                 {
                     lstKeep.Items.Add(classes[i]);
                 }
                 lstKeep.SelectedIndex = 0;
                 PrintSuccess("Loaded " + classes.Length + " classes");
-                lbl_keep.Text = "Keep (" + classes.Length + ")";
+                
             }
             else
             {
@@ -130,34 +139,54 @@ namespace DarknetLocator
 
         private void btn_moveRightAll_Click(object sender, EventArgs e)
         {
-            m_classesToRemove.AddRange(lstKeep.Items.OfType<string>().ToList());
+            lstRemove.Items.AddRange(lstKeep.Items);
+            lstKeep.Items.Clear();
+            Count();
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         private void btn_moveRight_Click(object sender, EventArgs e)
         {
-
+            var item = lstKeep.Items[lstKeep.SelectedIndex];
+            lstRemove.Items.Add(item);
+            lstKeep.Items.Remove(item);
+            Count();
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         private void btn_moveLeft_Click(object sender, EventArgs e)
         {
-
+            var item = lstRemove.Items[lstRemove.SelectedIndex];
+            lstKeep.Items.Add(item);
+            lstRemove.Items.Remove(item);
+            Count();
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         private void btn_moveLeftAll_Click(object sender, EventArgs e)
         {
+            lstKeep.Items.AddRange(lstRemove.Items);
+            lstRemove.Items.Clear();
+            Count();
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         private void btn_remove_Click(object sender, EventArgs e)
         {
+            timerLoading.Start();
             bgLoadFile.RunWorkerAsync();
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        void Count()
+        {
+            lbl_keep.Text = "Keep (" + lstKeep.Items.Count + ")";
+            lbl_remove.Text = "Keep (" + lstRemove.Items.Count + ")";
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -171,7 +200,11 @@ namespace DarknetLocator
             var fileList = Directory.GetFiles(txtFolder.Text)
                 .Where(file => allowedExtensions.Any(file.ToLower().EndsWith)).ToList();
 
-            int[] keep = { 0, 3 };
+            List<int> keep = new List<int>();
+            for(int i=0; i<lstKeep.Items.Count; i++)
+            {
+                keep.Add(m_classes.IndexOf(lstKeep.Items[i].ToString()));
+            }
 
             int countSuccess = 0;
             foreach (string filePath in fileList)
@@ -201,6 +234,23 @@ namespace DarknetLocator
                     countSuccess++;
                 }                
             }
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        private void timerLoading_Tick(object sender, EventArgs e)
+        {
+            progressBar1.Value++;
+            if (progressBar1.Value >= progressBar1.Maximum)
+                progressBar1.Value = progressBar1.Minimum;
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        private void bgLoadFile_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            timerLoading.Stop();
+            progressBar1.Value = progressBar1.Minimum;
         }
     }
 }

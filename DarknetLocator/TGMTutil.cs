@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
@@ -23,18 +25,10 @@ namespace TGMTcs
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public static void OnlyInputNumber(object sender, KeyPressEventArgs e)
+        public static string GetStartupPath()
         {
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.'))
-            {
-                e.Handled = true;
-            }
-
-            // only allow one decimal point
-            if ((e.KeyChar == '.') && ((sender as TextBox).Text.IndexOf('.') > -1))
-            {
-                e.Handled = true;
-            }
+            string startupPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            return startupPath;
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -126,7 +120,7 @@ namespace TGMTcs
                     if (placeValue > 3) placeValue = 1;
 
                     if ((ones == 1) && (tens > 1))
-                        result = "một " + result;
+                        result = "mốt " + result;
                     else
                     {
                         if ((ones == 5) && (tens > 0))
@@ -156,6 +150,55 @@ namespace TGMTcs
             result = result[0].ToString().ToUpper() + result.Substring(1);
             return result + " đồng";
         }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public static string RemoveVNaccent(string accentedStr)
+        {
+            //Test case: Nguyễn Ngọc Hoàng
+            string result = accentedStr;
+
+            for (int i = 1; i < VietnameseSigns.Length; i++)
+            {
+                for (int j = 0; j < VietnameseSigns[i].Length; j++)
+                    result = result.Replace(VietnameseSigns[i][j], VietnameseSigns[0][i - 1]);
+            }
+            return result;
+        }
+
+        private static readonly string[] VietnameseSigns = new string[]
+        {
+
+            "aAeEoOuUiIdDyY",
+
+            "áàạảãâấầậẩẫăắằặẳẵ",
+
+            "ÁÀẠẢÃÂẤẦẬẨẪĂẮẰẶẲẴ",
+
+            "éèẹẻẽêếềệểễ",
+
+            "ÉÈẸẺẼÊẾỀỆỂỄ",
+
+            "óòọỏõôốồộổỗơớờợởỡ",
+
+            "ÓÒỌỎÕÔỐỒỘỔỖƠỚỜỢỞỠ",
+
+            "úùụủũưứừựửữ",
+
+            "ÚÙỤỦŨƯỨỪỰỬỮ",
+
+            "íìịỉĩ",
+
+            "ÍÌỊỈĨ",
+
+            "đ",
+
+            "Đ",
+
+            "ýỳỵỷỹ",
+
+            "ÝỲỴỶỸ"
+        };
     }
 }
 

@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Net.Sockets;
 using System.Text;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace TGMTcs
 {
@@ -106,12 +107,15 @@ namespace TGMTcs
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#if NET_45
-        public static async void SendPOSTrequest(string url, Dictionary<string, string> values, Action<string> callback)
+#if NET_45 || NET_46 || NET_47
+        public static async void SendPOSTrequest(string url, Dictionary<string, string> values, Action<int, string> callback)
         {
             try
             {
-                var content = new FormUrlEncodedContent(values);
+                var items = values.Select(i => WebUtility.UrlEncode(i.Key) + "=" + WebUtility.UrlEncode(i.Value));
+                var content = new StringContent(String.Join("&", items), null, "application/x-www-form-urlencoded");
+
+
                 HttpClient client = new HttpClient();
                 System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
                 var result = await client.PostAsync(url, content);
@@ -119,14 +123,14 @@ namespace TGMTcs
                 var responseString = await result.Content.ReadAsStringAsync();
                 if (callback != null)
                 {
-                    callback(responseString);
+                    callback((int)result.StatusCode, responseString);
                 }
             }
             catch(Exception ex)
             {
                 if (callback != null)
                 {
-                    callback("{\"Error\" : \"Không kết nối được server: " + ex.Message + "\"}");
+                    callback(399, "{\"Error\" : \"Không kết nối được server: " + ex.Message + "\"}");
                 }
             }
             

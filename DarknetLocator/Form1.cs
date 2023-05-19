@@ -580,6 +580,11 @@ namespace DarknetLocator
             if (File.Exists(classPath))
             {
                 m_classes = File.ReadAllLines(classPath);
+                if(m_classes.Length == 0)
+                {
+                    PrintError("File classes.txt is empty");
+                    return;
+                }
                 for (int i = 0; i < m_classes.Length; i++)
                 {
                     cb_classes.Items.Add(m_classes[i]);
@@ -587,12 +592,19 @@ namespace DarknetLocator
             }
             else
             {
-                m_classes = new string[]{"dog", "person", "cat", "tv", "car", "meatballs", "marinara sauce",
-                    "tomato soup", "chicken noodle soup", "french onion soup", "chicken breast", "ribs", "pulled pork", "hamburger", "cavity"};
+                m_classes = new string[]{ "person", "bicycle", "car", "motorcycle", "airplane", "bus", "train",
+                    "truck", "boat", "traffic light", "fire hydrant", "stop sign", "parking meter", "bench", "bird",
+                    "cat", "dog", "horse", "sheep", "cow", "elephant", "bear", "zebra", "giraffe", "backpack", "umbrella",
+                    "handbag", "tie", "suitcase", "frisbee", "skis", "snowboard", "sports ball", "kite", "baseball bat",
+                    "baseball glove", "skateboard", "surfboard", "tennis racket", "bottle", "wine glass", "cup", "fork",
+                    "knife", "spoon", "bowl", "banana", "apple", "sandwich", "orange", "broccoli", "carrot", "hot dog",
+                    "pizza", "donut", "cake", "chair", "couch", "potted plant", "bed", "dining table", "toilet", "tv",
+                    "laptop", "mouse", "remote", "keyboard", "cell phone", "microwave", "oven", "toaster", "sink",
+                    "refrigerator", "book", "clock", "vase", "scissors", "teddy bear", "hair drier", "toothbrush" };
                 cb_classes.Items.AddRange(m_classes);
 
                 File.WriteAllLines(classPath, m_classes);
-            }
+            }            
             cb_classes.SelectedIndex = 0;
         }
 
@@ -933,6 +945,7 @@ namespace DarknetLocator
                     lstImg.Items[selectedIndex - 1].Selected = true;
                     lstImg.EnsureVisible(selectedIndex - 1);
                     e.Handled = true;
+                    e.SuppressKeyPress = true;
                 }
                 return;
             }
@@ -949,6 +962,7 @@ namespace DarknetLocator
                     lstImg.Items[selectedIndex + 1].Selected = true;
                     lstImg.EnsureVisible(selectedIndex + 1);
                     e.Handled = true;
+                    e.SuppressKeyPress = true;
                 }
                 return;
             }
@@ -1124,6 +1138,7 @@ namespace DarknetLocator
 
         private void PictureBox1_Paint(object sender, PaintEventArgs e)
         {
+            Pen blue_thick = new Pen(Color.Blue, 2);
             //draw new rect
             if (g_isMouseDown)
             {
@@ -1180,7 +1195,8 @@ namespace DarknetLocator
                 }
                 else
                 {
-                    e.Graphics.DrawRectangle(Pens.Blue, r);
+                    
+                    e.Graphics.DrawRectangle(blue_thick, r);
                     e.Graphics.DrawString(className, myFont, blueBrush, r.X, r.Y - 20);
                 }
             }
